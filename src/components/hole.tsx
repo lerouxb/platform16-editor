@@ -8,7 +8,7 @@ export function Hole({ x, y, r, washerSize }: HoleState): JSX.Element {
   const cx = x + synthState.width / 2;
   const cy = y + synthState.height / 2;
 
-  const fill = synthState.inverted ? 'black' : 'white';
+  const fill = synthState.inverted ? 'white' : 'none';
   const stroke = synthState.inverted ? 'white' : 'black';
 
   return <g>
