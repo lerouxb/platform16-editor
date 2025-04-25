@@ -1,0 +1,11 @@
+
+body {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+}
+@media print {    
+    .no-print, .no-print * {
+        display: none !important;
+    }
+}
