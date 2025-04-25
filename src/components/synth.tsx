@@ -5,6 +5,7 @@ import { Connection } from './connection';
 import { Knob } from './knob';
 import { Label } from './label';
 import { Hole } from './hole';
+import { Button } from './button';
 
 export function Synth(): JSX.Element {
   const synthState = useSynthState().state;
@@ -23,6 +24,7 @@ export function Synth(): JSX.Element {
       {synthState.knobs.map((knob, i) => <Knob key={`knob-${i}`} {...knob} />)}
       {synthState.mountingHoles && synthState.holes.map((hole, i) => <Hole key={`hole-${i}`} {...hole} />)}
       {synthState.labels.map((label, i) => <Label key={`label-${i}`} {...label} />)}
+      {synthState.buttons.map((button, i) => <Button key={`button-${i}`} {...button} />)}
       <image href={synthState.inverted ? '/logo-transparent-inverted.png' : '/logo-transparent.png'} x={`${synthState.width/2 - 18}mm`} y={`${synthState.height/2 - 16}mm`} width="36mm" />
     </svg>
   );

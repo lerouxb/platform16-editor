@@ -25,6 +25,16 @@ export type KnobState = {
   dy?: number;
 };
 
+export type ButtonState = {
+  id: string;
+  x: number;
+  y: number;
+  label: string;
+  angle: number;
+  dx?: number;
+  dy?: number;
+}
+
 export type ConnectionState = {
   from: number;
   to: number;
@@ -66,7 +76,8 @@ export type SynthState = {
   knobs: KnobState[]
   connections: ConnectionState[],
   labels: LabelState[],
-  holes: HoleState[]
+  holes: HoleState[],
+  buttons: ButtonState[]
 };
 
 type SynthAction = {
@@ -116,7 +127,7 @@ export const defaultSynthState: SynthState = {
     { id: 'k10', x: -23, y: 11.5, label: 'Scale', angle: 0 }, 
     { id: 'k11', x: 23, y: 11.5, label: 'Resonance', angle: 0 },
     { id: 'k12', x: -46, y: 23, label: 'Pitch', angle: 0 },
-    { id: 'k13', x: 0, y: 23, label: 'Drive', angle: 0 },
+    { id: 'k13', x: 0, y: 23, label: 'Overdrive', angle: 0 },
     { id: 'k14', x: 46, y: 23, label: 'Cutoff', angle: 0 },
     { id: 'k15', x: -23, y: 34.5, label: 'Amount', angle: 0 }, // pitch amount
     { id: 'k16', x: 23, y: 34.5, label: 'Amount', angle: 0 }, // filter amount
@@ -141,9 +152,13 @@ export const defaultSynthState: SynthState = {
   ],
   holes: [
     { id: 'h1', x: -47.781, y: -35.036, r: 1.5, washerSize: 9 },
-    { id: 'h1', x: 47.781, y: -35.036, r: 1.5, washerSize: 9 },
-    { id: 'h1', x: -47.781, y: 35.036, r: 1.5, washerSize: 9 },
-    { id: 'h1', x: 47.781, y: 35.036, r: 1.5, washerSize: 9 },
+    { id: 'h2', x: 47.781, y: -35.036, r: 1.5, washerSize: 9 },
+    { id: 'h3', x: -47.781, y: 35.036, r: 1.5, washerSize: 9 },
+    { id: 'h4', x: 47.781, y: 35.036, r: 1.5, washerSize: 9 },
+  ],
+  buttons: [
+    { id: 'b1', x: -38.8, y: 40, label: 'Boot', angle: 0, dx: -26, dy: 1 },
+    { id: 'b2', x: 38.8, y: 40, label: 'Reset', angle: 0, dx: 29, dy: 1 },
   ]
 };
 
