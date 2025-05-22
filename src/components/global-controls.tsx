@@ -1,6 +1,10 @@
 import React, { JSX } from 'react';
 import { useSynthState } from '../state/synth';
 
+const groupStyles: React.CSSProperties = {
+  marginLeft: '20px'
+};
+
 const fieldStyles: React.CSSProperties = {
   marginTop: '10px'
 };
@@ -65,8 +69,12 @@ export function GlobalControls(): JSX.Element {
     }
   }
 
-  function clickInverted() {
-    synthDispatch({ type: 'toggleInvertedClicked' });
+  function clickShowHoles() {
+    if (synthState.showHoles) {
+      synthDispatch({ type: 'hideHolesClicked' });
+    } else {
+      synthDispatch({ type: 'showHolesClicked' });
+    }
   }
 
   return (
@@ -78,16 +86,22 @@ export function GlobalControls(): JSX.Element {
         <label htmlFor="print">Print</label>
       </div>
       <div style={fieldStyles}>
-        <input type="checkbox" id="inverted" name="inverted" checked={synthState.inverted} onChange={() => {}} onClick={() => clickInverted()}/>
-        <label htmlFor="preview">Inverted</label>
+        <input type="checkbox" id="holes" name="showHoles" checked={synthState.showHoles} onChange={() => {}} onClick={() => clickShowHoles()}/>
+        <label htmlFor="preview">Holes</label>
       </div>
-      <div style={fieldStyles}>
-        pot holes:
-        <input type="radio" id="hole-6mm" name="holeSize" checked={synthState.holeSize === 6} onChange={() => {}} onClick={() => click6mm()}/>
-        <label htmlFor="hole-6mm">6mm</label>
-        <input type="radio" id="hole-9mm" name="holeSize" checked={synthState.holeSize === 9} onChange={() => {}} onClick={(e) => click9mm()}/>
-        <label htmlFor="hole-9mm">9mm</label>
-      </div>
+      {synthState.showHoles && <div style={groupStyles}>
+        <div style={fieldStyles}>
+          pot holes:
+          <input type="radio" id="hole-6mm" name="holeSize" checked={synthState.holeSize === 6} onChange={() => {}} onClick={() => click6mm()}/>
+          <label htmlFor="hole-6mm">6mm</label>
+          <input type="radio" id="hole-9mm" name="holeSize" checked={synthState.holeSize === 9} onChange={() => {}} onClick={(e) => click9mm()}/>
+          <label htmlFor="hole-9mm">9mm</label>
+        </div>
+        <div style={fieldStyles}>
+          <input type="checkbox" id="mountingHoles" name="mountingHoles" checked={synthState.mountingHoles} onChange={() => toggleMountingHoles()}/>
+          <label htmlFor="mountingHoles">Mounting holes</label>
+        </div>
+      </div>}
       <div style={fieldStyles}>
         <input type="checkbox" id="washers" name="washers" checked={synthState.washers} onChange={() => toggleShowWashers()}/>
         <label htmlFor="washers">Washers</label>
@@ -103,10 +117,6 @@ export function GlobalControls(): JSX.Element {
       <div style={fieldStyles}>
         <input type="checkbox" id="giantKnobs" name="giantKnobs" checked={synthState.giantKnobs} onChange={() => toggleGiantKnobs()}/>
         <label htmlFor="giantKnobs">Giant knobs</label>
-      </div>
-      <div style={fieldStyles}>
-        <input type="checkbox" id="mountingHoles" name="mountingHoles" checked={synthState.mountingHoles} onChange={() => toggleMountingHoles()}/>
-        <label htmlFor="mountingHoles">Mounting holes</label>
       </div>
     </div>
   );

@@ -8,10 +8,9 @@ export function Hole({ x, y, r, washerSize }: HoleState): JSX.Element {
   const cx = x + synthState.width / 2;
   const cy = y + synthState.height / 2;
 
-  const fill = synthState.inverted ? 'white' : 'none';
-  const stroke = synthState.inverted ? 'white' : 'black';
 
   return <g>
-      <circle cx={`${cx}mm`} cy={`${cy}mm`} r={`${r}mm`} fill={synthState.print ? 'none' : fill} stroke={stroke} />
+      {synthState.showHoles && synthState.print && <circle cx={`${cx}mm`} cy={`${cy}mm`} r={`${r}mm`} fill={'silver'} stroke="none" />}
+      {synthState.showHoles && <circle cx={`${cx}mm`} cy={`${cy}mm`} r={`${synthState.print ? 0.5 : r}mm`} fill={synthState.print ? 'black' : 'red'} stroke="none" />}
     </g>
 }

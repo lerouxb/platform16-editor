@@ -1,18 +1,19 @@
 import React, { createContext  } from 'react';
 
 const nameFG = '#000';
-const nameBG = 'none';
+const nameBG = '#fff';
 
 const nameTextStyles: React.CSSProperties = {
-  fontFamily: '"Roboto"',
+  fontFamily: "Darumadrop One",
   fontWeight: '400',
-  fontSize: '5mm',
+  fontSize: '2.6mm',
   fill: nameFG,
-  textDecoration: 'underline',
 };
 
 const nameRectStyles: React.CSSProperties = {
-  fill: nameBG,
+  fill: 'none',
+  stroke: nameBG,
+  strokeWidth: '0.5mm',
 };
 
 export type KnobState = {
@@ -38,6 +39,8 @@ export type ButtonState = {
 export type ConnectionState = {
   from: number;
   to: number;
+  shortenStart?: number;
+  shortenEnd?: number;
 };
 
 export type LabelState = {
@@ -45,7 +48,6 @@ export type LabelState = {
   x: number;
   y: number;
   label: string;
-  angle: number;
   dx?: number;
   dy?: number;
   includeRect?: boolean;
@@ -63,7 +65,7 @@ export type HoleState = {
 
 export type SynthState = {
   print: boolean;
-  inverted: boolean;
+  showHoles: boolean;
   washers: boolean;
   smallKnobs: boolean;
   largeKnobs: boolean;
@@ -96,13 +98,14 @@ type SynthAction = {
     | '9mmClicked'
     | 'showMountingHolesClicked'
     | 'hideMountingHolesClicked'
-    | 'toggleInvertedClicked'
+    | 'showHolesClicked'
+    | 'hideHolesClicked'
 };
 type SynthDispatch = (action: SynthAction) => void
 
 export const defaultSynthState: SynthState = {
   print: false,
-  inverted: false,
+  showHoles: true,
   washers: true,
   smallKnobs: false,
   largeKnobs: false,
@@ -127,16 +130,16 @@ export const defaultSynthState: SynthState = {
     { id: 'k10', x: -23, y: 11.5, label: 'Scale', angle: 0 }, 
     { id: 'k11', x: 23, y: 11.5, label: 'Resonance', angle: 0 },
     { id: 'k12', x: -46, y: 23, label: 'Pitch', angle: 0 },
-    { id: 'k13', x: 0, y: 23, label: 'Overdrive', angle: 0 },
-    { id: 'k14', x: 46, y: 23, label: 'Cutoff', angle: 0 },
+    { id: 'k13', x: 0, y: 23, label: 'Evolve', angle: 0 },
+    { id: 'k14', x: 46, y: 23, label: 'Filter', angle: 0 },
     { id: 'k15', x: -23, y: 34.5, label: 'Amount', angle: 0 }, // pitch amount
     { id: 'k16', x: 23, y: 34.5, label: 'Amount', angle: 0 }, // filter amount
   ],
   connections: [
-   { from: 11, to: 7},
+   { from: 11, to: 7, shortenEnd: 10},
    { from: 11, to: 14},
    
-   { from: 13, to: 8},
+   { from: 13, to: 8, shortenEnd: 10},
    { from: 13, to: 15},
 
    { from: 3, to: 0},
@@ -147,8 +150,10 @@ export const defaultSynthState: SynthState = {
    { from: 6, to: 4},
   ],
   labels: [
-    //{ id: 'l5', x: 0, y: -1, label: 'Stochastic', angle: 0, includeRect: false, rectStyles: nameRectStyles, textStyles: nameTextStyles },
-    //{ id: 'l5', x: 0, y: 5, label: 'Decay', angle: 0, includeRect: false, rectStyles: nameRectStyles, textStyles: nameTextStyles },
+    //{ id: 'l1', x: 0, y: -3.5, label: 'Stochastic Decay', angle: 0, includeRect: false, rectStyles: nameRectStyles, textStyles: nameTextStyles },
+    { id: 'l2', x: 0, y: 7, label: 'Stochastic Decay', includeRect: false, rectStyles: nameRectStyles, textStyles: {... nameTextStyles } },
+    { id: 'l3', x: -40.5, y: -41, label: '▼', includeRect: false, rectStyles: nameRectStyles, textStyles: {... nameTextStyles, fontFamily: 'Roboto' } },
+    { id: 'l4', x: 40.5, y: -41, label: '▲', includeRect: false, rectStyles: nameRectStyles, textStyles: {... nameTextStyles, fontFamily: 'Roboto' } },
   ],
   holes: [
     { id: 'h1', x: -47.781, y: -35.036, r: 1.5, washerSize: 9 },
@@ -157,8 +162,8 @@ export const defaultSynthState: SynthState = {
     { id: 'h4', x: 47.781, y: 35.036, r: 1.5, washerSize: 9 },
   ],
   buttons: [
-    { id: 'b1', x: -38.8, y: 40, label: 'Boot', angle: 0, dx: -26, dy: 1 },
-    { id: 'b2', x: 38.8, y: 40, label: 'Reset', angle: 0, dx: 29, dy: 1 },
+    { id: 'b1', x: -38.4, y: 40, label: 'Boot', angle: 0, dx: -7, dy: 0.25 },
+    { id: 'b2', x: 38.4, y: 40, label: 'Reset', angle: 0, dx: 7.5, dy: 0.25 },
   ]
 };
 
@@ -197,8 +202,10 @@ export function synthReducer(state: SynthState, action: SynthAction): SynthState
       return { ...state, mountingHoles: true };
     case 'hideMountingHolesClicked':
       return { ...state, mountingHoles: false };
-    case 'toggleInvertedClicked':
-      return { ...state, inverted: !state.inverted };
+    case 'showHolesClicked':
+      return { ...state, showHoles: true };
+    case 'hideHolesClicked':
+      return { ...state, showHoles: false };
   }
 }
 
