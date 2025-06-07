@@ -42,27 +42,11 @@ export function GlobalControls(): JSX.Element {
     }
   }
 
-  function toggleGiantKnobs() {
-    if (synthState.giantKnobs) {
-      synthDispatch({ type: 'hideGiantKnobsClicked' });
+  function toggleKnobs() {
+    if (synthState.showKnobs) {
+      synthDispatch({ type: 'hideKnobsClicked' });
     } else {
-      synthDispatch({ type: 'showGiantKnobsClicked' });
-    }
-  }
-
-  function toggleLargeKnobs() {
-    if (synthState.largeKnobs) {
-      synthDispatch({ type: 'hideLargeKnobsClicked' });
-    } else {
-      synthDispatch({ type: 'showLargeKnobsClicked' });
-    }
-  }
-
-  function toggleSmallKnobs() {
-    if (synthState.smallKnobs) {
-      synthDispatch({ type: 'hideSmallKnobsClicked' });
-    } else {
-      synthDispatch({ type: 'showSmallKnobsClicked' });
+      synthDispatch({ type: 'showKnobsClicked' });
     }
   }
 
@@ -109,8 +93,8 @@ export function GlobalControls(): JSX.Element {
         <label htmlFor="washers">Washers</label>
       </div>
       <div style={groupStyles}>
-        <input type="checkbox" id="smallKnobs" name="smallKnobs" style={inputStyles} checked={synthState.smallKnobs} onChange={() => toggleSmallKnobs()}/>
-        <label htmlFor="smallKnobs">Knobs</label>
+        <input type="checkbox" id="showKnobs" name="showKnobs" style={inputStyles} checked={synthState.showKnobs} onChange={() => toggleKnobs()}/>
+        <label htmlFor="showKnobs">Knobs</label>
       </div>
     </div>
   );

@@ -31,9 +31,7 @@ export function Knob({ id, x, y, label, angle, dx, dy }: KnobState): JSX.Element
       {synthState.showHoles && synthState.print && <circle cx={vz(cx)} cy={vz(cy)} r={vz((synthState.holeSize)/2)} fill={'silver'} stroke="none" />}
       {synthState.showHoles && <circle cx={vz(cx)} cy={vz(cy)} r={vz(synthState.print ? 0.5 : (synthState.holeSize)/2)} fill={synthState.print ? 'black' : 'white'} stroke="none" />}
       {synthState.washers && !synthState.print && <circle cx={vz(cx)} cy={vz(cy)} r={vz(14/2-2.5/2)} fill="none" stroke="lightsteelblue" strokeWidth={vz(2.5)} className="no-print" />}
-      {synthState.smallKnobs && !synthState.print && <circle cx={vz(cx)} cy={vz(cy)} r={vz(5.5)} fill="none" stroke="black" strokeWidth={vz(0.5)} strokeDasharray="1" />}
-      {synthState.largeKnobs && !synthState.print && <circle cx={vz(cx)} cy={vz(cy)} r={vz(9.5)} fill="none" stroke="black" strokeWidth={vz(0.5)} strokeDasharray="1" />}
-      {synthState.giantKnobs && !synthState.print && <circle cx={vz(cx)} cy={vz(cy)} r={vz(14.25)} fill="none" stroke="black" strokeWidth={vz(0.5)} strokeDasharray="1" />}
+      {synthState.showKnobs && !synthState.print && <circle cx={vz(cx)} cy={vz(cy)} r={vz(5.5)} fill="none" stroke="black" strokeWidth={vz(0.5)} strokeDasharray="1" />}
     </g>
   );
 }

@@ -86,9 +86,7 @@ export type SynthState = {
   print: boolean;
   showHoles: boolean;
   washers: boolean;
-  smallKnobs: boolean;
-  largeKnobs: boolean;
-  giantKnobs: boolean;
+  showKnobs: boolean;
   holeSize: number,
   drillTolerance: number,
   mountingHoles: boolean,
@@ -107,12 +105,8 @@ type SynthAction = {
     | 'previewClicked'
     | 'showWashersClicked'
     | 'hideWashersClicked'
-    | 'showSmallKnobsClicked'
-    | 'hideSmallKnobsClicked'
-    | 'showLargeKnobsClicked'
-    | 'hideLargeKnobsClicked'
-    | 'showGiantKnobsClicked'
-    | 'hideGiantKnobsClicked'
+    | 'showKnobsClicked'
+    | 'hideKnobsClicked'
     | '6mmClicked'
     | '9mmClicked'
     | 'showMountingHolesClicked'
@@ -126,9 +120,7 @@ export const defaultSynthState: SynthState = {
   print: false,
   showHoles: true,
   washers: true,
-  smallKnobs: false,
-  largeKnobs: false,
-  giantKnobs: false,
+  showKnobs: false,
   holeSize: 9,
   drillTolerance: 0.5,
   mountingHoles: false,
@@ -203,18 +195,10 @@ export function synthReducer(state: SynthState, action: SynthAction): SynthState
       return { ...state, washers: true };
     case 'hideWashersClicked':
       return { ...state, washers: false };
-    case 'showSmallKnobsClicked':
-      return { ...state, smallKnobs: true };
-    case 'hideSmallKnobsClicked':
-      return { ...state, smallKnobs: false };
-    case 'showLargeKnobsClicked':
-      return { ...state, largeKnobs: true };
-    case 'hideLargeKnobsClicked':
-      return { ...state, largeKnobs: false };
-    case 'showGiantKnobsClicked':
-      return { ...state, giantKnobs: true };
-    case 'hideGiantKnobsClicked':
-      return { ...state, giantKnobs: false };
+    case 'showKnobsClicked':
+      return { ...state, showKnobs: true };
+    case 'hideKnobsClicked':
+      return { ...state, showKnobs: false };
     case '6mmClicked':
       return { ...state, holeSize: 6 };
     case '9mmClicked':
