@@ -5,7 +5,7 @@ import { sizer } from "../utils/sizing";
 
 const fg = 'black';
 
-export function Button({ id, x, y, label, angle, dx, dy }: ButtonState): JSX.Element {
+export function Button({ id, x, y, label, dx, dy }: ButtonState): JSX.Element {
   const synthState = useSynthState().state;
   const { vz } = sizer();
   const cx = x + synthState.width / 2;
@@ -24,7 +24,7 @@ export function Button({ id, x, y, label, angle, dx, dy }: ButtonState): JSX.Ele
 
   return (
     <g>
-      <Label  {...{ id: `${id}-label`, x, y, dx, dy, label: label.toUpperCase(), angle, textStyles, rectStyles }} />
+      <Label  {...{ id: `${id}-label`, x, y, dx, dy, label: label.toUpperCase(), textStyles, rectStyles }} />
       {synthState.showHoles && synthState.print && <circle cx={vz(cx)} cy={vz(cy)} r={vz(4.5/2)} fill={'silver'} stroke="none" />}
       {synthState.showHoles && <circle cx={vz(cx)} cy={vz(cy)} r={vz(synthState.print ? 0.5 : 4.5/2)} fill={synthState.print ? 'black' : 'white'} stroke="none" />}
     </g>

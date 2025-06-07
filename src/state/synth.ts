@@ -40,9 +40,7 @@ export type KnobState = {
   x: number;
   y: number;
   label: string;
-  angle: number;
-  dx?: number;
-  dy?: number;
+  numSpokes?: number;
 };
 
 export type ButtonState = {
@@ -50,7 +48,6 @@ export type ButtonState = {
   x: number;
   y: number;
   label: string;
-  angle: number;
   dx?: number;
   dy?: number;
 }
@@ -127,24 +124,24 @@ export const defaultSynthState: SynthState = {
   width: 117.23,
   height: 91.74,
   knobs: [
-    { id: 'k1', x: -23, y: -34.5, label: 'Amount', angle: 0 }, // vol amount
-    { id: 'k2', x: 23, y: -34.5, label: 'Decay', angle: 0 }, // vol decay
-    { id: 'k3', x: -46, y: -23, label: 'Step', angle: 0 },
-    { id: 'k4', x: 0, y: -23, label: 'Volume', angle: 0 },
-    { id: 'k5', x: 46, y: -23, label: 'Algorithm', angle: 0 },
-    { id: 'k6', x: -23, y: -11.5, label: 'Skip', angle: 0 },
-    { id: 'k7', x: 23, y: -11.5, label: 'Tempo', angle: 0 },
+    { id: 'k1', x: -23, y: -34.5, label: 'Amount' }, // vol amount
+    { id: 'k2', x: 23, y: -34.5, label: 'Decay' }, // vol decay
+    { id: 'k3', x: -46, y: -23, label: 'Step' }, // 32+1 or 16+1. lots of spokes..
+    { id: 'k4', x: 0, y: -23, label: 'Volume' },
+    { id: 'k5', x: 46, y: -23, label: 'Algorithm', numSpokes: 13 },
+    { id: 'k6', x: -23, y: -11.5, label: 'Skip' },
+    { id: 'k7', x: 23, y: -11.5, label: 'Tempo' },
 
-    { id: 'k8', x: -46, y: 0, label: 'Decay', angle: 0 }, // pitch decay
-    { id: 'k9', x: 46, y: 0, label: 'Decay', angle: 0 }, // pitch decay
+    { id: 'k8', x: -46, y: 0, label: 'Decay' }, // pitch decay
+    { id: 'k9', x: 46, y: 0, label: 'Decay' }, // pitch decay
 
-    { id: 'k10', x: -23, y: 11.5, label: 'Scale', angle: 0 }, 
-    { id: 'k11', x: 23, y: 11.5, label: 'Resonance', angle: 0 },
-    { id: 'k12', x: -46, y: 23, label: 'Pitch', angle: 0 },
-    { id: 'k13', x: 0, y: 23, label: 'Evolve', angle: 0 },
-    { id: 'k14', x: 46, y: 23, label: 'Filter', angle: 0 },
-    { id: 'k15', x: -23, y: 34.5, label: 'Amount', angle: 0 }, // pitch amount
-    { id: 'k16', x: 23, y: 34.5, label: 'Amount', angle: 0 }, // filter amount
+    { id: 'k10', x: -23, y: 11.5, label: 'Scale', numSpokes: 7 }, 
+    { id: 'k11', x: 23, y: 11.5, label: 'Resonance' },
+    { id: 'k12', x: -46, y: 23, label: 'Pitch' },
+    { id: 'k13', x: 0, y: 23, label: 'Evolve' },
+    { id: 'k14', x: 46, y: 23, label: 'Filter' },
+    { id: 'k15', x: -23, y: 34.5, label: 'Amount' }, // pitch amount
+    { id: 'k16', x: 23, y: 34.5, label: 'Amount' }, // filter amount
   ],
   connections: [
    { from: 11, to: 7, shortenEnd: 10},
@@ -156,14 +153,16 @@ export const defaultSynthState: SynthState = {
    { from: 3, to: 0},
    { from: 3, to: 1},
 
+   /*
    { from: 2, to: 5},
    { from: 5, to: 6},
    { from: 6, to: 4},
+    */
   ],
   labels: [
     //{ id: 'l1', x: 0, y: -3.5, label: 'Stochastic', includeRect: false, rectStyles: nameRectStyles, textStyles: nameTextStyles1 },
     //{ id: 'l2', x: 0, y: 3.5, label: 'Decay', includeRect: false, rectStyles: nameRectStyles, textStyles: nameTextStyles2 },
-    //{ id: 'l1', x: 0, y: -3.5, label: 'Stochastic Decay', angle: 0, includeRect: false, rectStyles: nameRectStyles, textStyles: nameTextStyles },
+    //{ id: 'l1', x: 0, y: -3.5, label: 'Stochastic Decay', includeRect: false, rectStyles: nameRectStyles, textStyles: nameTextStyles },
     { id: 'l2', x: 0, y: 7, label: 'Stochastic Decay', includeRect: false, rectStyles: nameRectStyles, textStyles: {... nameTextStyles } },
     { id: 'l3', x: -40.5, y: -41, label: '▼', includeRect: false, rectStyles: nameRectStyles, textStyles: {... nameTextStyles, fontFamily: 'Roboto' } },
     { id: 'l4', x: 40.5, y: -41, label: '▲', includeRect: false, rectStyles: nameRectStyles, textStyles: {... nameTextStyles, fontFamily: 'Roboto' } },
@@ -175,8 +174,8 @@ export const defaultSynthState: SynthState = {
     { id: 'h4', x: 48.908, y: 36.958, r: 1.6, washerSize: 9 },
   ],
   buttons: [
-    { id: 'b1', x: -38.4, y: 40, label: 'Boot', angle: 0, dx: -7, dy: 0.25 },
-    { id: 'b2', x: 38.4, y: 40, label: 'Reset', angle: 0, dx: 7.5, dy: 0.25 },
+    { id: 'b1', x: -38.4, y: 40, label: 'Boot', dx: -7, dy: 0.25 },
+    { id: 'b2', x: 38.4, y: 40, label: 'Reset', dx: 7.5, dy: 0.25 },
   ]
 };
 
