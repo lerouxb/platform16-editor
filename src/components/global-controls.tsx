@@ -2,11 +2,16 @@ import React, { JSX } from 'react';
 import { useSynthState } from '../state/synth';
 
 const groupStyles: React.CSSProperties = {
-  marginLeft: '20px'
+  marginTop: '10px',
 };
 
 const fieldStyles: React.CSSProperties = {
-  marginTop: '10px'
+  display: 'inline-block',
+  marginLeft: '8px',
+};
+
+const inputStyles: React.CSSProperties = {
+  verticalAlign: 'textTop',
 };
 
 export function GlobalControls(): JSX.Element {
@@ -79,44 +84,33 @@ export function GlobalControls(): JSX.Element {
 
   return (
     <div className="no-print">
-      <div style={fieldStyles}>
-        <input type="radio" id="preview" name="print" checked={!synthState.print} onChange={() => {}} onClick={() => clickPreview()}/>
+      <div style={groupStyles}>
+        <input type="radio" id="preview" name="print" style={inputStyles} checked={!synthState.print} onChange={() => {}} onClick={() => clickPreview()}/>
         <label htmlFor="preview">Preview</label>
-        <input type="radio" id="print" name="print" checked={!!synthState.print} onChange={() => {}} onClick={(e) => clickPrint()}/>
+        <input type="radio" id="print" name="print" style={inputStyles} checked={!!synthState.print} onChange={() => {}} onClick={(e) => clickPrint()}/>
         <label htmlFor="print">Print</label>
       </div>
-      <div style={fieldStyles}>
-        <input type="checkbox" id="holes" name="showHoles" checked={synthState.showHoles} onChange={() => {}} onClick={() => clickShowHoles()}/>
+      <div style={groupStyles}>
+        <input type="checkbox" id="holes" name="showHoles" style={inputStyles} checked={synthState.showHoles} onChange={() => {}} onClick={() => clickShowHoles()}/>
         <label htmlFor="preview">Holes</label>
-      </div>
-      {synthState.showHoles && <div style={groupStyles}>
-        <div style={fieldStyles}>
-          pot holes:
-          <input type="radio" id="hole-6mm" name="holeSize" checked={synthState.holeSize === 6} onChange={() => {}} onClick={() => click6mm()}/>
+      {synthState.showHoles && <div style={fieldStyles}>
+          <input type="radio" id="hole-6mm" name="holeSize" style={inputStyles} checked={synthState.holeSize === 6} onChange={() => {}} onClick={() => click6mm()}/>
           <label htmlFor="hole-6mm">6mm</label>
-          <input type="radio" id="hole-9mm" name="holeSize" checked={synthState.holeSize === 9} onChange={() => {}} onClick={(e) => click9mm()}/>
+          <input type="radio" id="hole-9mm" name="holeSize" style={inputStyles} checked={synthState.holeSize === 9} onChange={() => {}} onClick={(e) => click9mm()}/>
           <label htmlFor="hole-9mm">9mm</label>
-        </div>
-        <div style={fieldStyles}>
-          <input type="checkbox" id="mountingHoles" name="mountingHoles" checked={synthState.mountingHoles} onChange={() => toggleMountingHoles()}/>
+        </div>}
+      {synthState.showHoles && <div style={fieldStyles}>
+          <input type="checkbox" id="mountingHoles" name="mountingHoles" style={inputStyles} checked={synthState.mountingHoles} onChange={() => toggleMountingHoles()}/>
           <label htmlFor="mountingHoles">Mounting holes</label>
-        </div>
-      </div>}
-      <div style={fieldStyles}>
-        <input type="checkbox" id="washers" name="washers" checked={synthState.washers} onChange={() => toggleShowWashers()}/>
+        </div>}
+      </div>
+      <div style={groupStyles}>
+        <input type="checkbox" id="washers" name="washers" style={inputStyles} checked={synthState.washers} onChange={() => toggleShowWashers()}/>
         <label htmlFor="washers">Washers</label>
       </div>
-      <div style={fieldStyles}>
-        <input type="checkbox" id="smallKnobs" name="smallKnobs" checked={synthState.smallKnobs} onChange={() => toggleSmallKnobs()}/>
-        <label htmlFor="smallKnobs">Small knobs</label>
-      </div>
-      <div style={fieldStyles}>
-        <input type="checkbox" id="largeKnobs" name="largeKnobs" checked={synthState.largeKnobs} onChange={() => toggleLargeKnobs()}/>
-        <label htmlFor="largeKnobs">Large knobs</label>
-      </div>
-      <div style={fieldStyles}>
-        <input type="checkbox" id="giantKnobs" name="giantKnobs" checked={synthState.giantKnobs} onChange={() => toggleGiantKnobs()}/>
-        <label htmlFor="giantKnobs">Giant knobs</label>
+      <div style={groupStyles}>
+        <input type="checkbox" id="smallKnobs" name="smallKnobs" style={inputStyles} checked={synthState.smallKnobs} onChange={() => toggleSmallKnobs()}/>
+        <label htmlFor="smallKnobs">Knobs</label>
       </div>
     </div>
   );

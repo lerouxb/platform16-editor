@@ -1,5 +1,6 @@
 import React, { JSX, useEffect, useRef, useState } from "react";
 import { useSynthState, LabelState } from "../state/synth";
+import { sizer } from "../utils/sizing";
 
 export function Label({ id, x, y, label, dx, dy, includeRect, textStyles, rectStyles  }: LabelState): JSX.Element {
   includeRect = includeRect ?? true;
@@ -8,20 +9,14 @@ export function Label({ id, x, y, label, dx, dy, includeRect, textStyles, rectSt
   const rectRef = useRef<SVGRectElement>(null);
 
   const synthState = useSynthState().state;
+  const { vz } = sizer();
 
   const cx = x + synthState.width / 2;
   const cy = y + synthState.height / 2;
 
 
-  //const [origin, setOrigin] = useState({ x: 0, y: 0 });
-  //const [dragging, setDragging] = useState(false);
-  //const [coordinates, setCoordinates] = useState({ x: dx ?? 0, y: dy ?? 0 });                                                                                                                                                  
-
   const transformTextStyles: React.CSSProperties = {
     ...textStyles,
-    //transform: `translate(${coordinates.x}px, ${coordinates.y}px) rotate(${angle}deg)`,
-    //transform: `translate(${dx}px, ${dy}px)`,
-    //transformOrigin: `${cx}mm ${cy}mm`,
   };
 
   useEffect(() => {
@@ -38,7 +33,6 @@ export function Label({ id, x, y, label, dx, dy, includeRect, textStyles, rectSt
 
       const rectX = (textRect.left - svgRect.left - hPadding).toString();
       const rectY = (textRect.top - svgRect.top - vPadding).toString();
-      //gRef.current?.setAttribute('style', `transform: translate(${rectX}px, ${rectY}px)`);
       rectRef.current?.setAttribute('x', rectX);
       rectRef.current?.setAttribute('y', rectY);
       rectRef.current?.setAttribute('width', (textRect.width + 2*hPadding).toString());
@@ -46,10 +40,8 @@ export function Label({ id, x, y, label, dx, dy, includeRect, textStyles, rectSt
 
       maskTextRef.current?.setAttribute('x', (textRect.left - svgRect.left).toString());
       maskTextRef.current?.setAttribute('y', (textRect.top - svgRect.top + 7.5).toString());
-      // You can now use rect to position other elements or for any other purpose
-      //console.log(id, textRect);
     }
-  }, [id/*, coordinates*/]);
+  }, [id]);
 
   
   /*
@@ -60,6 +52,8 @@ export function Label({ id, x, y, label, dx, dy, includeRect, textStyles, rectSt
 
   */
 
+  //const rotate = label.split('').map(() => Math.random()*10 - 10/2).join(' ');
+  const rotate = '';
 
   return (
     <g>
@@ -68,55 +62,13 @@ export function Label({ id, x, y, label, dx, dy, includeRect, textStyles, rectSt
       </g>)}
       <text
         ref={textRef}
-        x={`${cx+(dx ?? 0)}mm`}
-        y={`${cy+(dy ?? 0)}mm`}
+        x={vz(cx+(dx ?? 0))}
+        y={vz(cy+(dy ?? 0))}
         textAnchor="middle"
         dominantBaseline="middle"
         style={transformTextStyles}
+        rotate={rotate}
         >{label}</text>
     </g>
   );
 }
-
-/*
-        <mask id={`label-mask-${id}`} x="-30%" y="-30%" width="160%" height="160%">
-          <rect width="1000px" height="1000px" fill="white" />
-          <text
-            ref={maskTextRef}
-            style={{...textStyles, fill: 'black'}}
-            >{label}</text>
-        </mask>
- mask={`url(#label-mask-${id})`}
-*/
-
-    /*
-      <g
-        onPointerDown={e => {
-          const el = e.currentTarget;
-          el.setPointerCapture(e.pointerId);
-          const bbox = (e.target as HTMLElement).getBoundingClientRect();
-          const x = e.clientX - bbox.left;
-          const y = e.clientY - bbox.top;
-          // Record our starting point.
-          setOrigin({ x, y });
-          setDragging(true);
-        }}
-        onPointerMove={e => {
-          if (dragging) {
-            const bbox = (e.target as HTMLElement).getBoundingClientRect();
-            const x = e.clientX - bbox.left;
-            const y = e.clientY - bbox.top;
-            // Set state for the change in coordinates.
-            console.log(id, label, `dx: ${coordinates.x- (origin.x - x)}, dy: ${coordinates.y - (origin.y - y)}`);
-            setCoordinates({
-              x: coordinates.x - (origin.x - x),
-              y: coordinates.y - (origin.y - y),
-            });
-          }
-        }}
-        onPointerUp={() => {
-          setDragging(false);
-        }}
-      >
-    </g>
-        */

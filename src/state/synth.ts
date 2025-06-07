@@ -1,19 +1,38 @@
 import React, { createContext  } from 'react';
 
-const nameFG = '#000';
+const nameFG = 'black';
 const nameBG = '#fff';
 
 const nameTextStyles: React.CSSProperties = {
-  fontFamily: "Darumadrop One",
-  fontWeight: '400',
-  fontSize: '2.6mm',
+  //fontFamily: "Darumadrop One",
+  //fontFamily: '"Love Ya Like A Sister"',
+  fontFamily: "Roboto",
+  fontWeight: '700',
+  fontSize: 2.6,
   fill: nameFG,
 };
+
+/*
+const nameTextStyles1: React.CSSProperties = {
+  fontFamily: "Roboto",
+  fontWeight: '900',
+  fontSize: 4,
+  fill: nameFG,
+  textTransform: 'uppercase',
+};
+const nameTextStyles2: React.CSSProperties = {
+  fontFamily: "Roboto",
+  fontWeight: '900',
+  fontSize: 8,
+  fill: nameFG,
+  textTransform: 'uppercase',
+};
+*/
 
 const nameRectStyles: React.CSSProperties = {
   fill: 'none',
   stroke: nameBG,
-  strokeWidth: '0.5mm',
+  strokeWidth: 0.5,
 };
 
 export type KnobState = {
@@ -150,16 +169,18 @@ export const defaultSynthState: SynthState = {
    { from: 6, to: 4},
   ],
   labels: [
+    //{ id: 'l1', x: 0, y: -3.5, label: 'Stochastic', includeRect: false, rectStyles: nameRectStyles, textStyles: nameTextStyles1 },
+    //{ id: 'l2', x: 0, y: 3.5, label: 'Decay', includeRect: false, rectStyles: nameRectStyles, textStyles: nameTextStyles2 },
     //{ id: 'l1', x: 0, y: -3.5, label: 'Stochastic Decay', angle: 0, includeRect: false, rectStyles: nameRectStyles, textStyles: nameTextStyles },
     { id: 'l2', x: 0, y: 7, label: 'Stochastic Decay', includeRect: false, rectStyles: nameRectStyles, textStyles: {... nameTextStyles } },
     { id: 'l3', x: -40.5, y: -41, label: '▼', includeRect: false, rectStyles: nameRectStyles, textStyles: {... nameTextStyles, fontFamily: 'Roboto' } },
     { id: 'l4', x: 40.5, y: -41, label: '▲', includeRect: false, rectStyles: nameRectStyles, textStyles: {... nameTextStyles, fontFamily: 'Roboto' } },
   ],
   holes: [
-    { id: 'h1', x: -47.781, y: -35.036, r: 1.5, washerSize: 9 },
-    { id: 'h2', x: 47.781, y: -35.036, r: 1.5, washerSize: 9 },
-    { id: 'h3', x: -47.781, y: 35.036, r: 1.5, washerSize: 9 },
-    { id: 'h4', x: 47.781, y: 35.036, r: 1.5, washerSize: 9 },
+    { id: 'h1', x: -48.908, y: -36.958, r: 1.6, washerSize: 9 },
+    { id: 'h2', x: 48.908, y: -36.958, r: 1.6, washerSize: 9 },
+    { id: 'h3', x: -48.908, y: 36.958, r: 1.6, washerSize: 9 },
+    { id: 'h4', x: 48.908, y: 36.958, r: 1.6, washerSize: 9 },
   ],
   buttons: [
     { id: 'b1', x: -38.4, y: 40, label: 'Boot', angle: 0, dx: -7, dy: 0.25 },
