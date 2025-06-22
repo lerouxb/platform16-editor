@@ -27,8 +27,8 @@ export function GlobalControls(): JSX.Element {
     synthDispatch({ type: 'printClicked' });
   }
 
-  function click6mm() {
-    synthDispatch({ type: '6mmClicked' });
+  function click7mm() {
+    synthDispatch({ type: '7mmClicked' });
   }
   function click9mm() {
     synthDispatch({ type: '9mmClicked' });
@@ -78,7 +78,7 @@ export function GlobalControls(): JSX.Element {
         <input type="checkbox" id="holes" name="showHoles" style={inputStyles} checked={synthState.showHoles} onChange={() => {}} onClick={() => clickShowHoles()}/>
         <label htmlFor="preview">Holes</label>
       {synthState.showHoles && <div style={fieldStyles}>
-          <input type="radio" id="hole-6mm" name="holeSize" style={inputStyles} checked={synthState.holeSize === 6} onChange={() => {}} onClick={() => click6mm()}/>
+          <input type="radio" id="hole-6mm" name="holeSize" style={inputStyles} checked={synthState.holeSize === 7} onChange={() => {}} onClick={() => click7mm()}/>
           <label htmlFor="hole-6mm">6mm</label>
           <input type="radio" id="hole-9mm" name="holeSize" style={inputStyles} checked={synthState.holeSize === 9} onChange={() => {}} onClick={(e) => click9mm()}/>
           <label htmlFor="hole-9mm">9mm</label>

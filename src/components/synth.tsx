@@ -19,7 +19,8 @@ export function Synth(): JSX.Element {
       width: `${synthState.width}mm`,
       height: `${synthState.height}mm`
     } : {
-      width: '80vw'
+      width: '80vw',
+      maxWidth: `${synthState.width}mm`,
     }}>
     <svg
       viewBox={`0 0 ${synthState.width} ${synthState.height}`}
@@ -37,7 +38,6 @@ export function Synth(): JSX.Element {
         strokeWidth={vz(borderWidth)}
         stroke={synthState.showHoles ? 'grey' : 'none'}
         />
-      <image href={'/wave.svg'} x={vz(synthState.width/2 - 11)} y={vz(synthState.height/2 - 8)} width={vz(22)} />
       {synthState.connections.map((connection, i) => <Connection key={`connection-${i}`} n={i} {...connection} from={synthState.knobs[connection.from]} to={synthState.knobs[connection.to]} />)}
       {synthState.knobs.map((knob, i) => <Knob key={`knob-${i}`} {...knob} />)}
       {synthState.mountingHoles && synthState.holes.map((hole, i) => <Hole key={`hole-${i}`} {...hole} />)}
@@ -47,3 +47,7 @@ export function Synth(): JSX.Element {
     </div>
   );
 }
+
+/*
+      <image href={'/wave.svg'} x={vz(synthState.width/2 - 8)} y={vz(synthState.height/2 - 4 - 4)} width={vz(16)} />
+      */

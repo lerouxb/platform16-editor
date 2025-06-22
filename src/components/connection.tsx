@@ -44,6 +44,6 @@ export function Connection({ n, from, to, shortenStart, shortenEnd }: { n: numbe
   const [x1, y1, x2, y2] = shorten(n, from.x + synthState.width / 2, from.y + synthState.height / 2, to.x + synthState.width / 2, to.y + synthState.height / 2, shortenStart, shortenEnd);
 
   return (<g>
-    <line x1={vz(x1)} y1={vz(y1)} x2={vz(x2)} y2={vz(y2)} stroke={'black'} strokeWidth={vz(0.5)} />
+    <line x1={vz(x1)} y1={vz(y1)} x2={vz(x2)} y2={vz(y2)} stroke={'black'} strokeWidth={vz(1)} />
   </g>);
 }
