@@ -24,9 +24,10 @@ export function Button({ id, x, y, label, dx, dy }: ButtonState): JSX.Element {
 
   return (
     <g>
-      <Label  {...{ id: `${id}-label`, x, y, dx, dy, label: label.toUpperCase(), textStyles, rectStyles }} />
+      {label && <Label  {...{ id: `${id}-label`, x, y, dx, dy, label: label.toUpperCase(), textStyles, rectStyles }} />}
       {synthState.showHoles && synthState.print && <circle cx={vz(cx)} cy={vz(cy)} r={vz(4.5/2)} fill={'silver'} stroke="none" />}
       {synthState.showHoles && <circle cx={vz(cx)} cy={vz(cy)} r={vz(synthState.print ? 0.5 : 4.5/2)} fill={synthState.print ? 'black' : 'white'} stroke="none" />}
+      {synthState.showHoles && !synthState.print && <circle cx={vz(cx)} cy={vz(cy)} r={vz(3/2)} fill={'black' } stroke="none" className="no-print"/>}
     </g>
   );
 }

@@ -16,7 +16,7 @@ function getSpokeAngle(spokeNumber: number, numSpokes: number): number {
   return zeroAngle + angle;
 }
 
-export function Knob({ id, x, y, label, numSpokes }: KnobState): JSX.Element {
+export function Knob({ id, x, y, label, numSpokes, color }: KnobState): JSX.Element {
   const synthState = useSynthState().state;
   const { vz } = sizer();
   const cx = x + synthState.width / 2;
@@ -50,7 +50,7 @@ export function Knob({ id, x, y, label, numSpokes }: KnobState): JSX.Element {
       {synthState.showHoles && <circle cx={vz(cx)} cy={vz(cy)} r={vz(synthState.print ? 0.5 : (synthState.holeSize)/2)} fill={synthState.print ? 'black' : 'white'} stroke="none" />}
       {synthState.washers && !synthState.print && <circle cx={vz(cx)} cy={vz(cy)} r={vz(14/2-2.5/2)} fill="none" stroke="lightsteelblue" strokeWidth={vz(2.5)} className="no-print" />}
       {synthState.showKnobs && !synthState.print && <circle cx={vz(cx)} cy={vz(cy)} r={vz(5.5)} fill="black" stroke="black" strokeWidth={vz(0.75)} strokeDasharray={`${sd} ${sd}`} strokeLinecap="round" />}
-      {synthState.showKnobs && !synthState.print && <line x1={vz(cx)} y1={vz(cy)} x2={vz(cx)} y2={vz(cy-5.75)} stroke="white" strokeWidth={vz(1)} strokeLinecap="round"/>}
+      {synthState.showKnobs && !synthState.print && <line x1={vz(cx)} y1={vz(cy)} x2={vz(cx)} y2={vz(cy-5.75)} stroke={color} strokeWidth={vz(1)} strokeLinecap="round"/>}
     </g>
   );
 }

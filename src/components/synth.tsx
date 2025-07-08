@@ -3,6 +3,7 @@ import React, { JSX } from 'react';
 import { useSynthState } from '../state/synth';
 import { Connection } from './connection';
 import { Knob } from './knob';
+import { Image } from './image';
 import { Label } from './label';
 import { Hole } from './hole';
 import { Button } from './button';
@@ -41,6 +42,7 @@ export function Synth(): JSX.Element {
       {synthState.connections.map((connection, i) => <Connection key={`connection-${i}`} n={i} {...connection} from={synthState.knobs[connection.from]} to={synthState.knobs[connection.to]} />)}
       {synthState.knobs.map((knob, i) => <Knob key={`knob-${i}`} {...knob} />)}
       {synthState.mountingHoles && synthState.holes.map((hole, i) => <Hole key={`hole-${i}`} {...hole} />)}
+      {synthState.images.map((image, i) => <Image key={`image-${i}`} {...image} />)}
       {synthState.labels.map((label, i) => <Label key={`label-${i}`} {...label} />)}
       {synthState.buttons.map((button, i) => <Button key={`button-${i}`} {...button} />)}
     </svg>

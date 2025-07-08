@@ -48,13 +48,14 @@ export type KnobState = {
   y: number;
   label: string;
   numSpokes?: number;
+  color: string;
 };
 
 export type ButtonState = {
   id: string;
   x: number;
   y: number;
-  label: string;
+  label?: string;
   dx?: number;
   dy?: number;
 }
@@ -65,6 +66,15 @@ export type ConnectionState = {
   shortenStart?: number;
   shortenEnd?: number;
 };
+
+export type ImageState = {
+  id: string;
+  x: number;
+  y: number;
+  href: string;
+  width: number;
+  height: number;
+}
 
 export type LabelState = {
   id: string;
@@ -98,6 +108,7 @@ export type SynthState = {
   height: number;
   knobs: KnobState[]
   connections: ConnectionState[],
+  images: ImageState[],
   labels: LabelState[],
   holes: HoleState[],
   buttons: ButtonState[]
@@ -131,24 +142,24 @@ export const defaultSynthState: SynthState = {
   width: 117.23,
   height: 91.74,
   knobs: [
-    { id: 'k1', x: -23, y: -34.5, label: 'Amount' }, // vol amount
-    { id: 'k2', x: 23, y: -34.5, label: 'Env' }, // vol decay
-    { id: 'k3', x: -46, y: -23, label: 'Length' }, // 32+1 or 16+1. lots of spokes..
-    { id: 'k4', x: 0, y: -23, label: 'Volume' },
-    { id: 'k5', x: 46, y: -23, label: 'Algorithm', numSpokes: 13 },
-    { id: 'k6', x: -23, y: -11.5, label: 'Skip' },
-    { id: 'k7', x: 23, y: -11.5, label: 'Tempo' },
+    { id: 'k1', x: -23, y: -34.5, label: 'Amount', color: 'limegreen' }, // vol amount
+    { id: 'k2', x: 23, y: -34.5, label: 'Envelope', color: 'limegreen' }, // vol decay
+    { id: 'k3', x: -46, y: -23, label: 'Length', color: 'white' }, // 32+1 or 16+1. lots of spokes..
+    { id: 'k4', x: 0, y: -23, label: 'Volume', color: 'limegreen' },
+    { id: 'k5', x: 46, y: -23, label: 'Algorithm', numSpokes: 1, color: 'white' },
+    { id: 'k6', x: -23, y: -11.5, label: 'Skip', color: 'white' },
+    { id: 'k7', x: 23, y: -11.5, label: 'Tempo', color: 'white' },
 
-    { id: 'k8', x: -46, y: 0, label: 'Env' }, // pitch decay
-    { id: 'k9', x: 46, y: 0, label: 'Env' }, // filter decay
+    { id: 'k8', x: -46, y: 0, label: 'Envelope', color: 'orangered' }, // pitch decay
+    { id: 'k9', x: 46, y: 0, label: 'Envelope', color: 'cornflowerblue' }, // filter decay
 
-    { id: 'k10', x: -23, y: 11.5, label: 'Scale', numSpokes: 7 }, 
-    { id: 'k11', x: 23, y: 11.5, label: 'Resonance' },
-    { id: 'k12', x: -46, y: 23, label: 'Pitch' },
-    { id: 'k13', x: 0, y: 23, label: 'Evolve', numSpokes: 1 },
-    { id: 'k14', x: 46, y: 23, label: 'Filter' },
-    { id: 'k15', x: -23, y: 34.5, label: 'Amount' }, // pitch amount
-    { id: 'k16', x: 23, y: 34.5, label: 'Amount' }, // filter amount
+    { id: 'k10', x: -23, y: 11.5, label: 'Scale', numSpokes: 7, color: 'orangered' }, 
+    { id: 'k11', x: 23, y: 11.5, label: 'Resonance', color: 'cornflowerblue' },
+    { id: 'k12', x: -46, y: 23, label: 'Pitch', color: 'orangered' }, 
+    { id: 'k13', x: 0, y: 23, label: 'Evolve', color: 'white' },
+    { id: 'k14', x: 46, y: 23, label: 'Filter', color: 'cornflowerblue' },
+    { id: 'k15', x: -23, y: 34.5, label: 'Amount', color: 'orangered' }, // pitch amount
+    { id: 'k16', x: 23, y: 34.5, label: 'Amount', color: 'cornflowerblue' }, // filter amount
   ],
   connections: [
    { from: 11, to: 7, shortenEnd: 9.75},
@@ -174,26 +185,24 @@ export const defaultSynthState: SynthState = {
    { from: 6, to: 4},
     */
   ],
+  images: [
+    { id: 'i1', x: -40.5, y: -41, href: '/down-arrow.svg', width: 3, height: 3 },
+    { id: 'i2', x: 40.5, y: -41, href: '/up-arrow.svg', width: 3, height: 3  },
+  ],
   labels: [
     //{ id: 'l1', x: 0, y: -43, label: 'Stochastic Decay by Aleator', includeRect: false, rectStyles: nameRectStyles, textStyles: nameTextStyles1 },
 
     //{ id: 'l1', x: 0, y: -1, label: 'Stochastic', includeRect: false, rectStyles: nameRectStyles, textStyles: nameTextStyles1 },
     //{ id: 'l2', x: 0, y: 2, label: 'Decay', includeRect: false, rectStyles: nameRectStyles, textStyles: nameTextStyles2 },
-    { id: 'l3', x: -40.5, y: -41, label: '▼', includeRect: false, rectStyles: nameRectStyles, textStyles: {... nameTextStyles, fontFamily: 'Roboto' } },
-    { id: 'l4', x: 40.5, y: -41, label: '▲', includeRect: false, rectStyles: nameRectStyles, textStyles: {... nameTextStyles, fontFamily: 'Roboto' } },
 
     //{ id: 'l5', x: -8, y: 1, label: '(', includeRect: false, rectStyles: nameRectStyles, textStyles: nameTextStylesBracket },
     //{ id: 'l6', x: 8, y: 1, label: ')', includeRect: false, rectStyles: nameRectStyles, textStyles: nameTextStylesBracket },
   ],
   holes: [
-    { id: 'h1', x: -48.908, y: -36.958, r: 1.6, washerSize: 9 },
-    { id: 'h2', x: 48.908, y: -36.958, r: 1.6, washerSize: 9 },
-    { id: 'h3', x: -48.908, y: 36.958, r: 1.6, washerSize: 9 },
-    { id: 'h4', x: 48.908, y: 36.958, r: 1.6, washerSize: 9 },
   ],
   buttons: [
-    { id: 'b1', x: -38.4, y: 40, label: 'Boot', dx: -7, dy: 0.25 },
-    { id: 'b2', x: 38.4, y: 40, label: 'Reset', dx: 7.5, dy: 0.25 },
+    { id: 'b1', x: -34.5, y: 34.5, /*label: 'Boot', dx: 0, dy: 4.5 */},
+    { id: 'b2', x: 34.5, y: 34.5, /*label: 'Reset', dx: 0, dy: 4.5 */},
   ]
 };
 
