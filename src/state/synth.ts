@@ -49,6 +49,13 @@ export type KnobState = {
   label: string;
   numSpokes?: number;
   color: string;
+  center?: boolean;
+  left?: string;
+  right?: string; 
+  leftStart?: number;
+  leftSize?: number;
+  rightStart?: number;
+  rightSize?: number;
 };
 
 export type ButtonState = {
@@ -97,7 +104,7 @@ export type HoleState = {
 };
 
 export type SynthState = {
-  print: boolean;
+  mode: 'preview'|'print'|'cut';
   showHoles: boolean;
   washers: boolean;
   showKnobs: boolean;
@@ -118,6 +125,7 @@ type SynthAction = {
   type:
     | 'printClicked'
     | 'previewClicked'
+    | 'cutClicked'
     | 'showWashersClicked'
     | 'hideWashersClicked'
     | 'showKnobsClicked'
@@ -131,9 +139,19 @@ type SynthAction = {
 };
 type SynthDispatch = (action: SynthAction) => void
 
+const envelopeProps = {
+  center: true,
+  right: 'decay',
+  left: 'attack',
+  leftStart: 150,
+  leftSize: 65,
+  rightStart: 325,
+  rightSize: 65
+};
+
 export const defaultSynthState: SynthState = {
-  print: false,
-  showHoles: true,
+  mode: 'cut',
+  showHoles: false,
   washers: false,
   showKnobs: true,
   holeSize: 7,
@@ -142,26 +160,34 @@ export const defaultSynthState: SynthState = {
   width: 117.23,
   height: 91.74,
   knobs: [
-    { id: 'k1', x: -23, y: -34.5, label: 'Amount', color: 'limegreen' }, // vol amount
-    { id: 'k2', x: 23, y: -34.5, label: 'Envelope', color: 'limegreen' }, // vol decay
+    { id: 'k1', x: -23, y: -34.5, label: 'Bzzt', color: 'limegreen' },
+    { id: 'k2', x: 23, y: -34.5, label: 'Envelope', color: 'limegreen', ...envelopeProps }, // vol decay
     { id: 'k3', x: -46, y: -23, label: 'Length', color: 'white' }, // 32+1 or 16+1. lots of spokes..
     { id: 'k4', x: 0, y: -23, label: 'Volume', color: 'limegreen' },
-    { id: 'k5', x: 46, y: -23, label: 'Algorithm', numSpokes: 1, color: 'white' },
+    { id: 'k5', x: 46, y: -23, label: 'Algorithm', numSpokes: 13, color: 'white' },
     { id: 'k6', x: -23, y: -11.5, label: 'Skip', color: 'white' },
     { id: 'k7', x: 23, y: -11.5, label: 'Tempo', color: 'white' },
 
-    { id: 'k8', x: -46, y: 0, label: 'Envelope', color: 'orangered' }, // pitch decay
-    { id: 'k9', x: 46, y: 0, label: 'Envelope', color: 'cornflowerblue' }, // filter decay
+    { id: 'k8', x: -46, y: 0, label: 'Noise', color: 'orangered', }, 
+    { id: 'k9', x: 46, y: 0, label: 'Envelope', color: 'cornflowerblue', ...envelopeProps }, // filter decay
 
     { id: 'k10', x: -23, y: 11.5, label: 'Scale', numSpokes: 7, color: 'orangered' }, 
     { id: 'k11', x: 23, y: 11.5, label: 'Resonance', color: 'cornflowerblue' },
     { id: 'k12', x: -46, y: 23, label: 'Pitch', color: 'orangered' }, 
-    { id: 'k13', x: 0, y: 23, label: 'Evolve', color: 'white' },
+    { id: 'k13', x: 0, y: 23, label: 'Evolve', color: 'white', center: true, right: 'mod', left: 'skip', 
+
+  leftStart: 160,
+  leftSize: 50,
+  rightStart: 330,
+  rightSize: 50
+
+    },
     { id: 'k14', x: 46, y: 23, label: 'Filter', color: 'cornflowerblue' },
     { id: 'k15', x: -23, y: 34.5, label: 'Amount', color: 'orangered' }, // pitch amount
     { id: 'k16', x: 23, y: 34.5, label: 'Amount', color: 'cornflowerblue' }, // filter amount
   ],
   connections: [
+   /*
    { from: 11, to: 7, shortenEnd: 9.75},
    { from: 11, to: 14},
    
@@ -170,20 +196,7 @@ export const defaultSynthState: SynthState = {
 
    { from: 3, to: 0},
    { from: 3, to: 1},
-
-   /*
-   { from: 2, to: 5},
-   { from: 4, to: 6},
-   { from: 5, to: 6},
-   { from: 6, to: 12},
-   { from: 12, to: 5},
-    */
-
-   /*
-   { from: 2, to: 5},
-   { from: 5, to: 6},
-   { from: 6, to: 4},
-    */
+   */
   ],
   images: [
     { id: 'i1', x: -40.5, y: -41, href: '/down-arrow.svg', width: 3, height: 3 },
@@ -214,9 +227,11 @@ export const SynthStateContext = createContext<SynthStateDispatch | undefined>(u
 export function synthReducer(state: SynthState, action: SynthAction): SynthState {
   switch (action.type) {
     case 'printClicked':
-      return { ...state, print: true };
+      return { ...state, mode: 'print' };
     case 'previewClicked':
-      return { ...state, print: false };
+      return { ...state, mode: 'preview' };
+    case 'cutClicked':
+      return { ...state, mode: 'cut' };
     case 'showWashersClicked':
       return { ...state, washers: true };
     case 'hideWashersClicked':

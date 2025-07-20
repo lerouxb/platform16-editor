@@ -26,6 +26,9 @@ export function GlobalControls(): JSX.Element {
   function clickPrint() {
     synthDispatch({ type: 'printClicked' });
   }
+  function clickCut() {
+    synthDispatch({ type: 'cutClicked' });
+  }
 
   function click7mm() {
     synthDispatch({ type: '7mmClicked' });
@@ -69,10 +72,12 @@ export function GlobalControls(): JSX.Element {
   return (
     <div className="no-print">
       <div style={groupStyles}>
-        <input type="radio" id="preview" name="print" style={inputStyles} checked={!synthState.print} onChange={() => {}} onClick={() => clickPreview()}/>
+        <input type="radio" id="preview" name="print" style={inputStyles} checked={synthState.mode === 'preview'} onChange={() => {}} onClick={() => clickPreview()}/>
         <label htmlFor="preview">Preview</label>
-        <input type="radio" id="print" name="print" style={inputStyles} checked={!!synthState.print} onChange={() => {}} onClick={(e) => clickPrint()}/>
+        <input type="radio" id="print" name="print" style={inputStyles} checked={synthState.mode === 'print'} onChange={() => {}} onClick={(e) => clickPrint()}/>
         <label htmlFor="print">Print</label>
+        <input type="radio" id="cut" name="cut" style={inputStyles} checked={synthState.mode === 'cut'} onChange={() => {}} onClick={(e) => clickCut()}/>
+        <label htmlFor="print">Cut</label>
       </div>
       <div style={groupStyles}>
         <input type="checkbox" id="holes" name="showHoles" style={inputStyles} checked={synthState.showHoles} onChange={() => {}} onClick={() => clickShowHoles()}/>

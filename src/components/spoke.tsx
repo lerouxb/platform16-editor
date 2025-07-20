@@ -23,6 +23,6 @@ export function Spoke({ x, y, r1, r2, angle, width }: SpokeState): JSX.Element {
   const x2 = cx + r2 * Math.cos(angle * Math.PI / 180);
   const y2 = cy + r2 * Math.sin(angle * Math.PI / 180);
 
- return <line x1={vz(x1)} x2={vz(x2)} y1={vz(y1)} y2={vz(y2)} stroke="black" strokeWidth={vz(width)} stroke-linecap="round">
+ return <line x1={vz(x1)} x2={vz(x2)} y1={vz(y1)} y2={vz(y2)} stroke="black" strokeWidth={vz(width)} strokeLinecap="round">
     </line>
 }

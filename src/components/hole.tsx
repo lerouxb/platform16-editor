@@ -10,9 +10,19 @@ export function Hole({ x, y, r, washerSize }: HoleState): JSX.Element {
   const cx = x + synthState.width / 2;
   const cy = y + synthState.height / 2;
 
+  let holeFill = 'none';
+  if (synthState.mode === 'print') {
+    holeFill = 'black';
+   }
+  if (synthState.mode === 'preview') {
+    holeFill = 'white';
+  }
+  if (synthState.mode === 'cut') {
+    //holeFill = 'white'; // just for cricut
+  }
 
   return <g>
-      {synthState.showHoles && synthState.print && <circle cx={vz(cx)} cy={vz(cy)} r={vz(r)} fill={'silver'} stroke="none" />}
-      {synthState.showHoles && <circle cx={vz(cx)} cy={vz(cy)} r={vz(synthState.print ? 0.5 : r)} fill={synthState.print ? 'black' : 'white'} stroke="none" />}
+      {synthState.showHoles && synthState.mode === 'print' && <circle cx={vz(cx)} cy={vz(cy)} r={vz(r)} fill={'silver'} stroke="none" />}
+      {synthState.showHoles && <circle cx={vz(cx)} cy={vz(cy)} r={vz(synthState.mode === 'print' ? 0.5 : r)} fill={holeFill} stroke="none" />}
     </g>
 }
