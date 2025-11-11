@@ -42,6 +42,14 @@ const nameRectStyles: React.CSSProperties = {
   strokeWidth: 0.5,
 };
 
+export type TriangleIconState = {
+  triangles: number,
+  up: boolean,
+  two: boolean;
+};
+
+export type IconState = string | TriangleIconState;
+
 export type KnobState = {
   id: string;
   x: number;
@@ -50,12 +58,19 @@ export type KnobState = {
   numSpokes?: number;
   color: string;
   center?: boolean;
+
   left?: string;
   right?: string; 
   leftStart?: number;
   leftSize?: number;
   rightStart?: number;
   rightSize?: number;
+  
+  leftUnderline?: boolean;
+  rightUnderline?: boolean;
+
+  icons?: IconState[];
+  iconSpacing?: number; 
 };
 
 export type ButtonState = {
@@ -141,50 +156,103 @@ type SynthDispatch = (action: SynthAction) => void
 
 const envelopeProps = {
   center: true,
-  right: 'decay',
-  left: 'attack',
+  left: 'ATTACK',
+  right: 'DECAY',
   leftStart: 150,
-  leftSize: 65,
-  rightStart: 325,
-  rightSize: 65
+  leftSize: 60,
+  rightStart: 335,
+  rightSize: 50,
+  rightUnderline: true
+};
+
+
+const amountProps = {
+  center: true,
+  left: 'REDUCE',
+  right: 'INCREASE',
+  leftStart: 150,
+  leftSize: 60,
+  rightStart: 320,
+  rightSize: 75,
+  rightUnderline: true
 };
 
 export const defaultSynthState: SynthState = {
-  mode: 'cut',
+  mode: 'preview',
   showHoles: false,
   washers: false,
   showKnobs: true,
   holeSize: 7,
   drillTolerance: 0.5,
   mountingHoles: false,
-  width: 117.23,
-  height: 91.74,
+  width: 117.23 - 2.5,
+  height: 91.74 - 2.5,
   knobs: [
-    { id: 'k1', x: -23, y: -34.5, label: 'Bzzt', color: 'limegreen' },
+    { id: 'k1', x: -23, y: -34.5, label: 'Volume', color: 'limegreen' },
     { id: 'k2', x: 23, y: -34.5, label: 'Envelope', color: 'limegreen', ...envelopeProps }, // vol decay
     { id: 'k3', x: -46, y: -23, label: 'Length', color: 'white' }, // 32+1 or 16+1. lots of spokes..
-    { id: 'k4', x: 0, y: -23, label: 'Volume', color: 'limegreen' },
-    { id: 'k5', x: 46, y: -23, label: 'Algorithm', numSpokes: 13, color: 'white' },
-    { id: 'k6', x: -23, y: -11.5, label: 'Skip', color: 'white' },
-    { id: 'k7', x: 23, y: -11.5, label: 'Tempo', color: 'white' },
+    { id: 'k4', x: 0, y: -23, label: 'X', color: 'orange' },
+    { id: 'k5', x: 46, y: -23, label: 'Evolve', color: 'white', center: true, left: 'SKIP', right: 'MOD', 
 
-    { id: 'k8', x: -46, y: 0, label: 'Noise', color: 'orangered', }, 
+  leftStart: 162,
+  leftSize: 40,
+  rightStart: 342,
+  rightSize: 35,
+  rightUnderline: true },
+    { id: 'k6', x: -23, y: -11.5, label: 'Skip', color: 'white' },
+    { id: 'k7', x: 23, y: -11.5, label: 'Tempo', color: 'white', numSpokes: 15, icons: [
+      '÷',
+      ' ',
+      ' ',
+      ' ',
+      ' ',
+      ' ',
+      ' ',
+      ' ',
+      ' ',
+      ' ',
+      ' ',
+      ' ',
+      ' ',
+      ' ',
+      '×',
+    ] },
+
+    { id: 'k8', x: -46, y: 0, label: 'Algorithm', numSpokes: 9, color: 'orangered', icons: [
+      '?',
+      { triangles: 1, up: true, two: false },
+      { triangles: 1, up: false, two: false },
+      { triangles: 2, up: true, two: false },
+      { triangles: 2, up: false, two: false },
+      { triangles: 4, up: true, two: false },
+      { triangles: 4, up: false, two: false },
+      { triangles: 1, up: true, two: true },
+      { triangles: 1, up: false, two: true },
+    ] },
     { id: 'k9', x: 46, y: 0, label: 'Envelope', color: 'cornflowerblue', ...envelopeProps }, // filter decay
 
-    { id: 'k10', x: -23, y: 11.5, label: 'Scale', numSpokes: 7, color: 'orangered' }, 
+    { id: 'k10', x: -23, y: 11.5, label: 'Scale', numSpokes: 7, color: 'orangered', icons: [
+      'UNQ',
+      'CHR',
+      'MAJ',
+      'NMI',
+      'HMI',
+      'PMA',
+      'PMI'
+    ], iconSpacing: 2.5 }, 
     { id: 'k11', x: 23, y: 11.5, label: 'Resonance', color: 'cornflowerblue' },
     { id: 'k12', x: -46, y: 23, label: 'Pitch', color: 'orangered' }, 
-    { id: 'k13', x: 0, y: 23, label: 'Evolve', color: 'white', center: true, right: 'mod', left: 'skip', 
+    { id: 'k13', x: 0, y: 23, label: 'Y', color: 'orange', }, 
+    { id: 'k14', x: 46, y: 23, label: 'Filter', color: 'cornflowerblue', center: true, left: 'LOWPASS', right: 'HIGHPASS',
 
-  leftStart: 160,
-  leftSize: 50,
-  rightStart: 330,
-  rightSize: 50
-
+  leftStart: 140,
+  leftSize: 75,
+  rightStart: 320,
+  rightSize: 80,
+  leftUnderline: true
     },
-    { id: 'k14', x: 46, y: 23, label: 'Filter', color: 'cornflowerblue' },
-    { id: 'k15', x: -23, y: 34.5, label: 'Amount', color: 'orangered' }, // pitch amount
-    { id: 'k16', x: 23, y: 34.5, label: 'Amount', color: 'cornflowerblue' }, // filter amount
+    { id: 'k15', x: -23, y: 34.5, label: 'Amount', color: 'orangered', ...amountProps }, // pitch amount
+    { id: 'k16', x: 23, y: 34.5, label: 'Amount', color: 'cornflowerblue', ...amountProps }, // filter amount
   ],
   connections: [
    /*
@@ -203,7 +271,7 @@ export const defaultSynthState: SynthState = {
     { id: 'i2', x: 40.5, y: -41, href: '/up-arrow.svg', width: 3, height: 3  },
   ],
   labels: [
-    //{ id: 'l1', x: 0, y: -43, label: 'Stochastic Decay by Aleator', includeRect: false, rectStyles: nameRectStyles, textStyles: nameTextStyles1 },
+    { id: 'l1', x: 0, y: -41, label: 'Stochastic Decay v1.0', includeRect: false, rectStyles: nameRectStyles, textStyles: nameTextStyles1 },
 
     //{ id: 'l1', x: 0, y: -1, label: 'Stochastic', includeRect: false, rectStyles: nameRectStyles, textStyles: nameTextStyles1 },
     //{ id: 'l2', x: 0, y: 2, label: 'Decay', includeRect: false, rectStyles: nameRectStyles, textStyles: nameTextStyles2 },

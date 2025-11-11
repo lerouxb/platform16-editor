@@ -8,25 +8,39 @@ const fg = 'black';
 
 const zeroAngle = -240;
 const maxAngle = 300;
-const spokeLength = 3.5;
+const spokeLength = 3;
 
 function getSpokeAngle(spokeNumber: number, numSpokes: number): number {
   const rangePerSpoke = (maxAngle / numSpokes);
-  const angle = rangePerSpoke * (spokeNumber+0.5);
+  const angle = rangePerSpoke * (spokeNumber + 0.5);
   return zeroAngle + angle;
 }
 
-export function Knob({ id, x, y, label, numSpokes, color, left, right, center, leftStart = 150, leftSize = 65, rightStart = 325, rightSize = 65 }: KnobState): JSX.Element {
+export function Knob({
+  id, x, y, label, numSpokes, color,
+  icons, iconSpacing,
+  left, right, center, leftUnderline, rightUnderline,
+  // these defaults should go away, but it is just easier for now
+  leftStart = 150, leftSize = 65, rightStart = 325, rightSize = 65,
+
+}: KnobState): JSX.Element {
   const synthState = useSynthState().state;
   const { vz } = sizer();
   const cx = x + synthState.width / 2;
   const cy = y + synthState.height / 2;
-  const r = 10/2 + 3.5/2;
+  const r = 10 / 2 + 3.5 / 2;
 
   const textStyles: React.CSSProperties = {
     fontFamily: '"Roboto"',
     fontWeight: 800,
     fontSize: vz(3),
+    fill: fg,
+  };
+
+  const curveTextStyles: React.CSSProperties = {
+    fontFamily: '"Roboto"',
+    fontWeight: 800,
+    fontSize: vz(2),
     fill: fg,
   };
 
@@ -60,10 +74,10 @@ export function Knob({ id, x, y, label, numSpokes, color, left, right, center, l
   const right_x2 = cx + tr * Math.cos(right_end_angle * Math.PI / 180);
   const right_y2 = cy + tr * Math.sin(right_end_angle * Math.PI / 180);
 
-  console.log({numSpokes});
+  console.log({ numSpokes });
 
   let holeFill = 'none';
-  let holeRadius = synthState.holeSize/2;
+  let holeRadius = synthState.holeSize / 2;
   let holeStroke = 'none';
   if (synthState.mode === 'print') {
     holeFill = 'black';
@@ -75,16 +89,30 @@ export function Knob({ id, x, y, label, numSpokes, color, left, right, center, l
   if (synthState.mode === 'cut') {
     holeStroke = 'black';
     //holeFill = 'white'; // just for cricut
-    holeRadius = 10/2;
+    holeRadius = 8 / 2;
+  }
+
+  function makeCurveStyles(underline?: boolean): React.CSSProperties {
+    const styles = { ...curveTextStyles };
+    if (underline) {
+      styles.textDecoration = 'underline';
+    }
+    return styles;
   }
 
   return (
     <g>
-      {synthState.mode !== 'cut' && <Label  {...{ id: `${id}-label`, x, y: y+8.5, label: label.toUpperCase(), textStyles, rectStyles }} />}
+      {synthState.mode !== 'cut' && <Label  {...{ id: `${id}-label`, x, y: y + 8.5, label: label.toUpperCase(), textStyles, rectStyles }} />}
       {synthState.mode !== 'cut' && numSpokes && Array.from(Array(numSpokes).keys()).map((spokeNumber) => {
-        const sl = numSpokes < 10 || spokeNumber % 2 === 0 ? spokeLength : spokeLength - 0.5;
-        const sw = numSpokes < 10 || spokeNumber % 2 === 0 ? 1 : 0.75;
-        return <Spoke key={`spoke-${spokeNumber}`} {...{x, y, r1: synthState.holeSize/2+1, r2: synthState.holeSize/2 + sl, angle: getSpokeAngle(spokeNumber, numSpokes), width: sw}} />;
+        //const sl = numSpokes < 10 || spokeNumber % 2 === 0 ? spokeLength : spokeLength - 0.5;
+        //const sw = numSpokes < 10 || spokeNumber % 2 === 0 ? 1 : 0.75;
+        const sl = spokeLength;
+        const sw = 0.75;
+        if (icons && !icons[spokeNumber]) {
+          // this allows us to use a dot for the middle spoke
+          return null;
+        }
+        return <Spoke key={`spoke-${spokeNumber}`} {...{ x, y, r1: synthState.holeSize / 2 + 1, r2: synthState.holeSize / 2 + sl, angle: getSpokeAngle(spokeNumber, numSpokes), width: sw, icon: icons?.[spokeNumber], iconSpacing }} />;
       })}
       {left && synthState.mode !== 'cut' && <path
         key={`${id}-leftpath`}
@@ -98,14 +126,14 @@ export function Knob({ id, x, y, label, numSpokes, color, left, right, center, l
         fill="none"
         stroke="none"
         d={`M ${vz(right_x1)} ${vz(right_y1)} A ${vz(tr)} ${vz(tr)} 0 0 1 ${vz(right_x2)} ${vz(right_y2)}`} />}
-      {synthState.showHoles && synthState.mode === 'print' && <circle cx={vz(cx)} cy={vz(cy)} r={vz((synthState.holeSize)/2)} fill={'silver'} stroke="none" />}
+      {synthState.showHoles && synthState.mode === 'print' && <circle cx={vz(cx)} cy={vz(cy)} r={vz((synthState.holeSize) / 2)} fill={'silver'} stroke="none" />}
       {(synthState.showHoles || synthState.mode === 'cut') && <circle cx={vz(cx)} cy={vz(cy)} r={vz(holeRadius)} fill={holeFill} stroke={holeStroke} strokeWidth={vz(0.5)} />}
-      {synthState.washers && synthState.mode === 'preview' && <circle cx={vz(cx)} cy={vz(cy)} r={vz(14/2-2.5/2)} fill="none" stroke="lightsteelblue" strokeWidth={vz(2.5)} className="no-print" />}
+      {synthState.washers && synthState.mode === 'preview' && <circle cx={vz(cx)} cy={vz(cy)} r={vz(14 / 2 - 2.5 / 2)} fill="none" stroke="lightsteelblue" strokeWidth={vz(2.5)} className="no-print" />}
       {synthState.showKnobs && synthState.mode === 'preview' && <circle cx={vz(cx)} cy={vz(cy)} r={vz(5.5)} fill="black" stroke="black" strokeWidth={vz(0.75)} strokeDasharray={`${sd} ${sd}`} strokeLinecap="round" />}
-      {synthState.showKnobs && synthState.mode === 'preview' && <line x1={vz(cx)} y1={vz(cy)} x2={vz(cx)} y2={vz(cy-5.75)} stroke={color} strokeWidth={vz(1)} strokeLinecap="round"/>}
-      {synthState.mode !== 'cut' && center && <circle cx={vz(cx)} cy={vz(cy-7.5)} r={vz(0.75)} fill="black" stroke="none" />}
-      {left && synthState.mode !== 'cut' && <text style={textStyles}><textPath href={`#${id}-leftpath`}>{left}</textPath></text>}
-      {right && synthState.mode !== 'cut' && <text style={textStyles}><textPath href={`#${id}-rightpath`}>{right}</textPath></text>}
+      {synthState.showKnobs && synthState.mode === 'preview' && <line x1={vz(cx)} y1={vz(cy)} x2={vz(cx)} y2={vz(cy - 5.75)} stroke={color} strokeWidth={vz(1)} strokeLinecap="round" />}
+      {synthState.mode !== 'cut' && center && <circle cx={vz(cx)} cy={vz(cy - 7.5)} r={vz(0.75)} fill="black" stroke="none" />}
+      {left && synthState.mode !== 'cut' && <text style={makeCurveStyles(leftUnderline)}><textPath href={`#${id}-leftpath`}>{left}</textPath></text>}
+      {right && synthState.mode !== 'cut' && <text style={makeCurveStyles(rightUnderline)}><textPath href={`#${id}-rightpath`}>{right}</textPath></text>}
 
 
     </g>
