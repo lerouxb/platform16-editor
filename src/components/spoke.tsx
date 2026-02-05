@@ -43,8 +43,6 @@ function TriangleIcon({ x, y, triangles = 1, up = true, bold = false, two=false 
     points.push(`${vz(cx2)},${vz(cy2)}`, `${vz(cx3)},${vz(cy3)}`);
   }
 
-  console.log({ points });
-
   const strokeWidth = bold ? 0.4 : 0.25;
   
   return <polyline points={points.join(' ')} fill="none" stroke="black" strokeWidth={vz(strokeWidth)}/>;

@@ -1,4 +1,4 @@
-import React, { createContext  } from 'react';
+import React, { createContext } from 'react';
 
 const nameFG = 'black';
 const nameBG = '#fff';
@@ -60,17 +60,19 @@ export type KnobState = {
   center?: boolean;
 
   left?: string;
-  right?: string; 
+  right?: string;
   leftStart?: number;
   leftSize?: number;
   rightStart?: number;
   rightSize?: number;
-  
+
   leftUnderline?: boolean;
   rightUnderline?: boolean;
 
   icons?: IconState[];
-  iconSpacing?: number; 
+  iconSpacing?: number;
+
+  hilight?: boolean;
 };
 
 export type ButtonState = {
@@ -119,7 +121,7 @@ export type HoleState = {
 };
 
 export type SynthState = {
-  mode: 'preview'|'print'|'cut';
+  mode: 'preview' | 'print' | 'cut';
   showHoles: boolean;
   washers: boolean;
   showKnobs: boolean;
@@ -134,23 +136,35 @@ export type SynthState = {
   labels: LabelState[],
   holes: HoleState[],
   buttons: ButtonState[]
+  selectedKnobId?: string;
 };
 
 type SynthAction = {
   type:
-    | 'printClicked'
-    | 'previewClicked'
-    | 'cutClicked'
-    | 'showWashersClicked'
-    | 'hideWashersClicked'
-    | 'showKnobsClicked'
-    | 'hideKnobsClicked'
-    | '7mmClicked'
-    | '9mmClicked'
-    | 'showMountingHolesClicked'
-    | 'hideMountingHolesClicked'
-    | 'showHolesClicked'
-    | 'hideHolesClicked'
+  | 'printClicked'
+  | 'previewClicked'
+  | 'cutClicked'
+  | 'showWashersClicked'
+  | 'hideWashersClicked'
+  | 'showKnobsClicked'
+  | 'hideKnobsClicked'
+  | '7mmClicked'
+  | '9mmClicked'
+  | 'showMountingHolesClicked'
+  | 'hideMountingHolesClicked'
+  | 'showHolesClicked'
+  | 'hideHolesClicked'
+} | {
+  type: 'updateKnobLabel',
+  id: string,
+  label: string
+} | {
+  type: 'updateKnobColor',
+  id: string,
+  color: string
+} | {
+  type: 'selectKnob',
+  id?: string
 };
 type SynthDispatch = (action: SynthAction) => void
 
@@ -177,7 +191,133 @@ const amountProps = {
   rightUnderline: true
 };
 
-export const defaultSynthState: SynthState = {
+const rectStyles: React.CSSProperties = {
+  fill: 'none', 
+  stroke: '#fff',
+  strokeWidth: 0.5
+};
+
+const textStyles: React.CSSProperties = {
+  fontFamily: 'Roboto',
+  fontWeight: '700',
+  fontSize: 2,
+  fill: 'black',
+  textTransform: 'uppercase'
+};
+
+export const defaultSynthState: SynthState =
+{
+  mode: 'preview',
+  showHoles: false,
+  washers: false,
+  showKnobs: true,
+  holeSize: 7,
+  drillTolerance: 0.5,
+  mountingHoles: false,
+  width: 114.73,
+  height: 89.24,
+  knobs: [
+    {
+      id: 'k1',
+      x: -23,
+      y: -34.5,
+      label: 'Pattern',
+      color: 'limegreen'
+    },
+    { id: 'k2', x: 23, y: -34.5, label: 'Glide', color: 'orange', hilight: true },
+    { id: 'k3', x: -46, y: -23, label: 'Distortion', color: 'limegreen', hilight: true },
+    { id: 'k4', x: 0, y: -23, label: 'Tempo', color: 'white', hilight: true },
+    { id: 'k5', x: 46, y: -23, label: 'Volume', color: 'orange', hilight: true },
+    { id: 'k6', x: -23, y: -11.5, label: 'Accent', color: 'limegreen' },
+    { id: 'k7', x: 23, y: -11.5, label: 'Detune', color: 'orange', hilight: true },
+    { id: 'k8', x: -46, y: 0, label: 'Resonance', color: 'white', hilight: true },
+    { id: 'k9', x: 46, y: 0, label: 'Octave', color: 'white', hilight: true },
+    {
+      id: 'k10',
+      x: -23,
+      y: 11.5,
+      label: 'Accent',
+      color: 'cornflowerblue'
+    },
+    { id: 'k11', x: 23, y: 11.5, label: 'Accent', color: 'orangered' },
+    {
+      id: 'k12',
+      x: -46,
+      y: 23,
+      label: 'Cutoff',
+      color: 'cornflowerblue',
+      hilight: true
+    },
+    { id: 'k13', x: 0, y: 23, label: 'Rotate', color: 'white', hilight: true },
+    { id: 'k14', x: 46, y: 23, label: 'Degree', color: 'orangered', hilight: true },
+    {
+      id: 'k15',
+      x: -23,
+      y: 34.5,
+      label: 'Pattern',
+      color: 'cornflowerblue'
+    },
+    { id: 'k16', x: 23, y: 34.5, label: 'Pattern', color: 'orangered' }
+  ],
+  connections: [
+    //{ from: 5, to: 0, shortenEnd: 9.75 },
+    { from: 5, to: 2 },
+    { from: 0, to: 2 },
+
+    /*
+    { from: 6, to: 1, shortenEnd: 9.75 },
+    { from: 6, to: 4 },
+    { from: 1, to: 4 },
+    */
+
+    { from: 9, to: 11 },
+    //{ from: 14, to: 9, shortenEnd: 9.75 },
+    { from: 14, to: 11 },
+
+    { from: 10, to: 13 },
+    //{ from: 15, to: 10, shortenEnd: 9.75 },
+    { from: 15, to: 13 },
+  ],
+  images: [
+    {
+      id: 'i1',
+      x: -40.5,
+      y: -41,
+      href: '/down-arrow.svg',
+      width: 3,
+      height: 3
+    },
+    {
+      id: 'i2',
+      x: 40.5,
+      y: -41,
+      href: '/up-arrow.svg',
+      width: 3,
+      height: 3
+    }
+  ],
+  labels: [
+    {
+      id: 'l1',
+      x: 0,
+      y: -41,
+      label: 'Euclidian Polymeters',
+      includeRect: false,
+      rectStyles: { fill: 'none', stroke: '#fff', strokeWidth: 0.5 },
+      textStyles: {
+        fontFamily: 'Roboto',
+        fontWeight: '700',
+        fontSize: 2,
+        fill: 'black',
+        textTransform: 'uppercase'
+      }
+    }
+  ],
+  holes: [],
+  buttons: [ { id: 'b1', x: -34.5, y: 34.5 }, { id: 'b2', x: 34.5, y: 34.5 } ]
+}
+/*
+{
   mode: 'preview',
   showHoles: false,
   washers: false,
@@ -188,104 +328,57 @@ export const defaultSynthState: SynthState = {
   width: 117.23 - 2.5,
   height: 91.74 - 2.5,
   knobs: [
-    { id: 'k1', x: -23, y: -34.5, label: 'Volume', color: 'limegreen' },
-    { id: 'k2', x: 23, y: -34.5, label: 'Envelope', color: 'limegreen', ...envelopeProps }, // vol decay
-    { id: 'k3', x: -46, y: -23, label: 'Length', color: 'white' }, // 32+1 or 16+1. lots of spokes..
-    { id: 'k4', x: 0, y: -23, label: 'X', color: 'orange' },
-    { id: 'k5', x: 46, y: -23, label: 'Evolve', color: 'white', center: true, left: 'SKIP', right: 'MOD', 
-
-  leftStart: 162,
-  leftSize: 40,
-  rightStart: 342,
-  rightSize: 35,
-  rightUnderline: true },
-    { id: 'k6', x: -23, y: -11.5, label: 'Skip', color: 'white' },
-    { id: 'k7', x: 23, y: -11.5, label: 'Tempo', color: 'white', numSpokes: 15, icons: [
-      '÷',
-      ' ',
-      ' ',
-      ' ',
-      ' ',
-      ' ',
-      ' ',
-      ' ',
-      ' ',
-      ' ',
-      ' ',
-      ' ',
-      ' ',
-      ' ',
-      '×',
-    ] },
-
-    { id: 'k8', x: -46, y: 0, label: 'Algorithm', numSpokes: 9, color: 'orangered', icons: [
-      '?',
-      { triangles: 1, up: true, two: false },
-      { triangles: 1, up: false, two: false },
-      { triangles: 2, up: true, two: false },
-      { triangles: 2, up: false, two: false },
-      { triangles: 4, up: true, two: false },
-      { triangles: 4, up: false, two: false },
-      { triangles: 1, up: true, two: true },
-      { triangles: 1, up: false, two: true },
-    ] },
-    { id: 'k9', x: 46, y: 0, label: 'Envelope', color: 'cornflowerblue', ...envelopeProps }, // filter decay
-
-    { id: 'k10', x: -23, y: 11.5, label: 'Scale', numSpokes: 7, color: 'orangered', icons: [
-      'UNQ',
-      'CHR',
-      'MAJ',
-      'NMI',
-      'HMI',
-      'PMA',
-      'PMI'
-    ], iconSpacing: 2.5 }, 
-    { id: 'k11', x: 23, y: 11.5, label: 'Resonance', color: 'cornflowerblue' },
-    { id: 'k12', x: -46, y: 23, label: 'Pitch', color: 'orangered' }, 
-    { id: 'k13', x: 0, y: 23, label: 'Y', color: 'orange', }, 
-    { id: 'k14', x: 46, y: 23, label: 'Filter', color: 'cornflowerblue', center: true, left: 'LOWPASS', right: 'HIGHPASS',
-
-  leftStart: 140,
-  leftSize: 75,
-  rightStart: 320,
-  rightSize: 80,
-  leftUnderline: true
+    { id: 'k1', x: -23, y: -34.5, label: '1', color: 'white' },
+    { id: 'k2', x: 23, y: -34.5, label: '2', color: 'white' },
+    { id: 'k3', x: -46, y: -23, label: '3', color: 'white' },
+    { id: 'k4', x: 0, y: -23, label: '4', color: 'white' },
+    {
+      id: 'k5', x: 46, y: -23, label: '5', color: 'white',
     },
-    { id: 'k15', x: -23, y: 34.5, label: 'Amount', color: 'orangered', ...amountProps }, // pitch amount
-    { id: 'k16', x: 23, y: 34.5, label: 'Amount', color: 'cornflowerblue', ...amountProps }, // filter amount
+    { id: 'k6', x: -23, y: -11.5, label: '6', color: 'white' },
+    {
+      id: 'k7', x: 23, y: -11.5, label: '7', color: 'white',
+    },
+
+    {
+      id: 'k8', x: -46, y: 0, label: '8', color: 'white' },
+    { id: 'k9', x: 46, y: 0, label: '9', color: 'white' },
+
+    {
+      id: 'k10', x: -23, y: 11.5, label: '10', color: 'white'    },
+    { id: 'k11', x: 23, y: 11.5, label: '11', color: 'white' },
+    { id: 'k12', x: -46, y: 23, label: '12', color: 'white' },
+    { id: 'k13', x: 0, y: 23, label: '13', color: 'white', },
+    {
+      id: 'k14', x: 46, y: 23, label: '14', color: 'white' },
+    { id: 'k15', x: -23, y: 34.5, label: '15', color: 'white' },
+    { id: 'k16', x: 23, y: 34.5, label: '16', color: 'white' },
   ],
   connections: [
-   /*
-   { from: 11, to: 7, shortenEnd: 9.75},
-   { from: 11, to: 14},
-   
-   { from: 13, to: 8, shortenEnd: 9.75},
-   { from: 13, to: 15},
-
-   { from: 3, to: 0},
-   { from: 3, to: 1},
-   */
+    { from: 11, to: 7, shortenEnd: 9.75},
+    { from: 11, to: 14},
+    
+    { from: 13, to: 8, shortenEnd: 9.75},
+    { from: 13, to: 15},
+ 
+    { from: 3, to: 0},
+    { from: 3, to: 1},
   ],
   images: [
     { id: 'i1', x: -40.5, y: -41, href: '/down-arrow.svg', width: 3, height: 3 },
-    { id: 'i2', x: 40.5, y: -41, href: '/up-arrow.svg', width: 3, height: 3  },
+    { id: 'i2', x: 40.5, y: -41, href: '/up-arrow.svg', width: 3, height: 3 },
   ],
   labels: [
-    { id: 'l1', x: 0, y: -41, label: 'Stochastic Decay v1.0', includeRect: false, rectStyles: nameRectStyles, textStyles: nameTextStyles1 },
-
-    //{ id: 'l1', x: 0, y: -1, label: 'Stochastic', includeRect: false, rectStyles: nameRectStyles, textStyles: nameTextStyles1 },
-    //{ id: 'l2', x: 0, y: 2, label: 'Decay', includeRect: false, rectStyles: nameRectStyles, textStyles: nameTextStyles2 },
-
-    //{ id: 'l5', x: -8, y: 1, label: '(', includeRect: false, rectStyles: nameRectStyles, textStyles: nameTextStylesBracket },
-    //{ id: 'l6', x: 8, y: 1, label: ')', includeRect: false, rectStyles: nameRectStyles, textStyles: nameTextStylesBracket },
+    { id: 'l1', x: 0, y: -41, label: 'Euclidian Polymeters', includeRect: false, rectStyles: nameRectStyles, textStyles: nameTextStyles1 },
   ],
   holes: [
   ],
   buttons: [
-    { id: 'b1', x: -34.5, y: 34.5, /*label: 'Boot', dx: 0, dy: 4.5 */},
-    { id: 'b2', x: 34.5, y: 34.5, /*label: 'Reset', dx: 0, dy: 4.5 */},
+    { id: 'b1', x: -34.5, y: 34.5,  }, // label: 'Boot', dx: 0, dy: 4.5
+{ id: 'b2', x: 34.5, y: 34.5, }, // label: 'Reset', dx: 0, dy: 4.5
   ]
 };
+*/
 
 
 type SynthStateDispatch = { state: SynthState; dispatch: SynthDispatch };
@@ -320,13 +413,28 @@ export function synthReducer(state: SynthState, action: SynthAction): SynthState
       return { ...state, showHoles: true };
     case 'hideHolesClicked':
       return { ...state, showHoles: false };
+
+    case 'updateKnobLabel':
+      return {
+        ...state,
+        knobs: state.knobs.map(k => k.id === action.id ? { ...k, label: action.label } : k),
+      };
+
+    case 'updateKnobColor':
+      return {
+        ...state,
+        knobs: state.knobs.map(k => k.id === action.id ? { ...k, color: action.color } : k),
+      };
+
+    case 'selectKnob':
+      return { ...state, selectedKnobId: action.id };
   }
 }
 
 export function useSynthState(): SynthStateDispatch {
-	const context = React.useContext(SynthStateContext)
-	if (context === undefined) {
-		throw new Error('useSynthState must be used within a SynthStateProvider')
-	}
-	return context
+  const context = React.useContext(SynthStateContext)
+  if (context === undefined) {
+    throw new Error('useSynthState must be used within a SynthStateProvider')
+  }
+  return context
 }

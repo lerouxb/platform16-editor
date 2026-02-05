@@ -37,7 +37,6 @@ export function Connection({ n, from, to, shortenStart, shortenEnd }: { n: numbe
   shortenStart = shortenStart ?? 10/2;
   shortenEnd = shortenEnd ?? 10/2;
 
-  console.log(shortenStart, shortenEnd);
   const synthState = useSynthState().state;
   const { vz } = sizer();
 

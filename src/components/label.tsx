@@ -27,7 +27,6 @@ export function Label({ id, x, y, label, dx, dy, includeRect, textStyles, rectSt
         return;
       }
 
-      console.log(textRect);
       const hPadding = 4;
       const vPadding = 2;
 

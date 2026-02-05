@@ -18,8 +18,6 @@ export function GlobalControls(): JSX.Element {
   const synthState = useSynthState().state;
   const synthDispatch = useSynthState().dispatch;
 
-  console.log(synthState);
-
   function clickPreview() {
     synthDispatch({ type: 'previewClicked' });
   }
