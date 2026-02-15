@@ -225,9 +225,9 @@ export const defaultSynthState: SynthState =
       color: 'limegreen'
     },
     { id: 'k2', x: 23, y: -34.5, label: 'Glide', color: 'orange', hilight: true },
-    { id: 'k3', x: -46, y: -23, label: 'Distortion', color: 'limegreen', hilight: true },
+    { id: 'k3', x: -46, y: -23, label: 'Volume', color: 'limegreen', hilight: true },
     { id: 'k4', x: 0, y: -23, label: 'Tempo', color: 'white', hilight: true },
-    { id: 'k5', x: 46, y: -23, label: 'Volume', color: 'orange', hilight: true },
+    { id: 'k5', x: 46, y: -23, label: 'Overdrive', color: 'orange', hilight: true },
     { id: 'k6', x: -23, y: -11.5, label: 'Accent', color: 'limegreen' },
     { id: 'k7', x: 23, y: -11.5, label: 'Detune', color: 'orange', hilight: true },
     { id: 'k8', x: -46, y: 0, label: 'Resonance', color: 'white', hilight: true },
@@ -239,7 +239,7 @@ export const defaultSynthState: SynthState =
       label: 'Accent',
       color: 'cornflowerblue'
     },
-    { id: 'k11', x: 23, y: 11.5, label: 'Accent', color: 'orangered' },
+    { id: 'k11', x: 23, y: 11.5, label: 'Mode', color: 'orangered', hilight: true },
     {
       id: 'k12',
       x: -46,
