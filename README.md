@@ -50,3 +50,7 @@ public/         — Static assets (HTML shell, SVG icons)
 ## Default Panel
 
 The app ships with a default "Euclidian Polymeters" synth module layout: 16 colour-coded knobs arranged in a grid, two buttons, and connection lines grouping related controls. This serves as a starting point that can be customised through the UI.
+
+## Screenshot
+
+![screenshot](images/editor.png)
